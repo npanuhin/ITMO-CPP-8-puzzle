@@ -29,7 +29,7 @@ Solver::Solution Solver::solve(const Board &board) {
     std::priority_queue<Board, std::vector<Board>, decltype(score_comp)> queue(score_comp);
     std::map<Board, Board> parent;
     std::map<Board, unsigned> scores;
-    std::set<Board> used;
+    std::set<Board> visited;
 
     queue.push(board);
     scores[board] = 0;
@@ -40,7 +40,7 @@ Solver::Solution Solver::solve(const Board &board) {
             break;
         }
         queue.pop();
-        used.insert(current);
+        visited.insert(current);
 
         auto empty_pos = current.empty_pos();
         for (auto [dx, dy] : adjacent) {
@@ -50,25 +50,25 @@ Solver::Solution Solver::solve(const Board &board) {
                 auto v = current.swap(empty_pos, {y, x});
 
                 unsigned score = scores[current] + v.score();
-                if (used.count(v) && score >= scores[v]) {
+                if (visited.contains(v) && score >= scores[v]) {
                     continue;
                 }
                 scores[v] = score;
                 parent[v] = current;
-                if (!used.count(v)) {
+                if (!visited.contains(v)) {
                     queue.push(v);
                 }
             }
         }
     }
 
-    std::vector<Board> m_moves;
+    std::vector<Board> moves;
 
-    m_moves.push_back(queue.top());
-    while (m_moves.back() != board) {
-        m_moves.push_back(parent[m_moves.back()]);
+    moves.push_back(queue.top());
+    while (moves.back().moves() != 0) {
+        moves.push_back(parent[moves.back()]);
     }
-    std::reverse(m_moves.begin(), m_moves.end());
+    std::reverse(moves.begin(), moves.end());
 
-    return Solution(m_moves);
+    return Solution(moves);
 }
