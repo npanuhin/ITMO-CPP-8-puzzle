@@ -6,17 +6,22 @@
 class Solver {
     class Solution {
     public:
-        std::size_t moves() const { return 0; }
+        std::size_t moves() const;
 
         using const_iterator = std::vector<Board>::const_iterator;
 
-        const_iterator begin() const { return m_moves.begin(); }
+        const_iterator begin() const;
 
-        const_iterator end() const { return m_moves.end(); }
+        const_iterator end() const;
 
     private:
-        // FIXME:
         std::vector<Board> m_moves;
+
+        friend class Solver;
+
+        Solution() = default;
+
+        explicit Solution(const std::vector<Board>& moves);
     };
 
 public:
