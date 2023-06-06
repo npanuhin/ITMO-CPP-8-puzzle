@@ -82,8 +82,11 @@ unsigned Board::manhattan() const {
 }
 
 unsigned Board::score() const {
-    // return (unsigned)(moves() / 2.8) + manhattan();
-    return moves() + (unsigned)(2.85 * manhattan());
+    if (!m_score) {
+        // m_score = (unsigned)(moves() / 2.8) + manhattan();
+        m_score = moves() + (unsigned)(2.85 * manhattan());
+    }
+    return m_score.value();
 }
 
 std::string Board::to_string() const {

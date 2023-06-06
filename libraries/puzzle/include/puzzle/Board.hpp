@@ -1,6 +1,7 @@
 #ifndef PUZZLE_BOARD_HPP
 #define PUZZLE_BOARD_HPP
 
+#include <optional>
 #include <string>
 #include <vector>
 
@@ -48,6 +49,8 @@ private:
     std::vector<std::vector<unsigned>> m_table;
     std::pair<unsigned, unsigned> m_empty_pos;
     unsigned m_moves_count = 0;
+
+    mutable std::optional<unsigned> m_score = std::nullopt;
 };
 
 #endif  // PUZZLE_BOARD_HPP
