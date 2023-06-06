@@ -1,15 +1,14 @@
 #include "puzzle/Board.hpp"
 
 #include <algorithm>
+#include <cstring>
 #include <random>
 
 Board Board::create_goal(const unsigned size) {
     std::vector<std::vector<unsigned>> data(size, std::vector<unsigned>(size));
     unsigned value = 1;
     for (size_t i = 0; i < size; i++) {
-        for (size_t j = 0; j < size; j++) {
-            data[i][j] = value++;
-        }
+        std::iota(data[i].begin(), data[i].end(), i * size);
     }
     data[size - 1][size - 1] = 0;
     return Board(data);
@@ -21,10 +20,8 @@ Board Board::create_random(const unsigned size) {
     std::shuffle(shuffled.begin(), shuffled.end(), std::mt19937{std::random_device{}()});
 
     std::vector<std::vector<unsigned>> data(size, std::vector<unsigned>(size));
-    for (size_t i = 0, k = 0; i < size; i++) {
-        for (size_t j = 0; j < size; j++) {
-            data[i][j] = shuffled[k++];
-        }
+    for (size_t i = 0; i < size; i++) {
+        std::memcpy(data[i].data(), &shuffled[i * size], sizeof(unsigned) * size);
     }
     return Board(data);
 }
