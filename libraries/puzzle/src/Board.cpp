@@ -49,10 +49,7 @@ bool Board::is_goal() const {
     return hamming() == 0;
 }
 
-unsigned Board::hamming() const {
-    if (m_hamming)
-        return m_hamming.value();
-
+unsigned Board::calc_hamming() const {
     unsigned count  = 0;
     unsigned target = 1;
     for (size_t i = 0; i < size(); i++) {
@@ -65,8 +62,14 @@ unsigned Board::hamming() const {
     if (size() > 0 && m_table[size() - 1][size() - 1] == 0) {
         count -= 1;
     }
-    m_hamming = count;
     return count;
+}
+
+unsigned Board::hamming() const {
+    if (!m_hamming)
+        m_hamming = calc_hamming();
+
+    return m_hamming.value();
 }
 
 unsigned Board::manhattan() const {
@@ -84,12 +87,15 @@ unsigned Board::manhattan() const {
     return summ;
 }
 
-unsigned Board::score() const {
-    if (m_score)
-        return m_score.value();
+unsigned Board::calc_score() const {
+    // return (unsigned)(moves() / 2.8) + manhattan();
+    return moves() + (unsigned)(2.85 * manhattan());
+}
 
-    // m_score = (unsigned)(moves() / 2.8) + manhattan();
-    m_score = moves() + (unsigned)(2.85 * manhattan());
+unsigned Board::score() const {
+    if (!m_score)
+        m_score = calc_score();
+
     return m_score.value();
 }
 

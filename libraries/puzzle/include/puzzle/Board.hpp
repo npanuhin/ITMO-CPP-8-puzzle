@@ -21,10 +21,12 @@ public:
 
     bool is_goal() const;
 
+    unsigned calc_hamming() const;
     unsigned hamming() const;
 
     unsigned manhattan() const;
 
+    unsigned calc_score() const;
     unsigned score() const;
 
     std::string to_string() const;
@@ -50,7 +52,7 @@ private:
     std::pair<unsigned, unsigned> m_empty_pos;
     unsigned m_moves_count = 0;
 
-    mutable std::optional<unsigned> m_score = std::nullopt;
+    mutable std::optional<unsigned> m_score   = std::nullopt;
     mutable std::optional<unsigned> m_hamming = std::nullopt;
 };
 
