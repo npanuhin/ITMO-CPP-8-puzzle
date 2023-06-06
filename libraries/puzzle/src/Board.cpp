@@ -6,7 +6,6 @@
 
 Board Board::create_goal(const unsigned size) {
     std::vector<std::vector<unsigned>> data(size, std::vector<unsigned>(size));
-    unsigned value = 1;
     for (size_t i = 0; i < size; i++) {
         std::iota(data[i].begin(), data[i].end(), i * size);
     }
@@ -51,6 +50,9 @@ bool Board::is_goal() const {
 }
 
 unsigned Board::hamming() const {
+    if (m_hamming)
+        return m_hamming.value();
+
     unsigned count  = 0;
     unsigned target = 1;
     for (size_t i = 0; i < size(); i++) {
@@ -63,6 +65,7 @@ unsigned Board::hamming() const {
     if (size() > 0 && m_table[size() - 1][size() - 1] == 0) {
         count -= 1;
     }
+    m_hamming = count;
     return count;
 }
 
@@ -82,10 +85,11 @@ unsigned Board::manhattan() const {
 }
 
 unsigned Board::score() const {
-    if (!m_score) {
-        // m_score = (unsigned)(moves() / 2.8) + manhattan();
-        m_score = moves() + (unsigned)(2.85 * manhattan());
-    }
+    if (m_score)
+        return m_score.value();
+
+    // m_score = (unsigned)(moves() / 2.8) + manhattan();
+    m_score = moves() + (unsigned)(2.85 * manhattan());
     return m_score.value();
 }
 

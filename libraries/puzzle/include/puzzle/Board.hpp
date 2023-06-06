@@ -51,6 +51,7 @@ private:
     unsigned m_moves_count = 0;
 
     mutable std::optional<unsigned> m_score = std::nullopt;
+    mutable std::optional<unsigned> m_hamming = std::nullopt;
 };
 
 #endif  // PUZZLE_BOARD_HPP
